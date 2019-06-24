@@ -7,10 +7,22 @@ import { getEvents } from './api';
 class App extends Component {
   state = {
     events: [],
+    lat: null,
+    lon: null,
+  }
+
+  componentDidMount() {
+    this.updateEvents();
   }
 
   updateEvents = (lat, lon) => {
-    getEvents(lat, lon).then(events => this.setState({ events }));
+    if (lat && lon) {
+      getEvents(lat, lon).then(events => this.setState({ events, lat, lon }));
+    } else {
+      getEvents(this.state.lat, this.state.lon).then(events =>
+        this.setState({ events })
+      );
+    }
   }
 
   render() {
